@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -31,10 +32,38 @@ public:
     }
 };
 
+class Grade {
+public:
+    int studentId;
+    string courseCode;
+    string grade;
+
+    Grade(int studentId, string courseCode, string grade) {
+        this->studentId = studentId;
+        this->courseCode = courseCode;
+        this->grade = grade;
+    }
+};
+
+class Attendance {
+public:
+    int studentId;
+    string courseCode;
+    int attendancePercentage;
+
+    Attendance(int studentId, string courseCode, int attendancePercentage) {
+        this->studentId = studentId;
+        this->courseCode = courseCode;
+        this->attendancePercentage = attendancePercentage;
+    }
+};
+
 class RecordManagementSystem {
 private:
     vector<Student> students;
     vector<Course> courses;
+    vector<Grade> grades;
+    vector<Attendance> attendance;
 
 public:
     void addStudent(Student& student) {
@@ -167,28 +196,276 @@ void displayCourse(string courseId) {
             }
         }
     }
+
+        void addGrade(int studentId, string courseCode, string grade) {
+        Grade newGrade(studentId, courseCode, grade);
+        grades.push_back(newGrade);
+        cout << "Grade added successfully." << endl;
+    }
+
+    void editGrade(int studentId, string courseCode) {
+        bool found = false;
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades[i].studentId == studentId && grades[i].courseCode == courseCode) {
+                cout << "Enter new grade for student:" << endl;
+                // Pobranie nowego oceny od użytkownika i zaktualizowanie obiektu oceny
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Grade for student with student ID " << studentId << " and course code " << courseCode << " not found." << endl;
+        }
+    }
+
+    void deleteGrade(int studentId, string courseCode) {
+        bool found = false;
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades[i].studentId == studentId && grades[i].courseCode == courseCode) {
+                grades.erase(grades.begin() + i);
+                cout << "Grade deleted successfully." << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Grade for student with student ID " << studentId << " and course code " << courseCode << " not found." << endl;
+        }
+    }
+
+    void displayGrades(int studentId) {
+        bool found = false;
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades[i].studentId == studentId) {
+                cout << "Grades for student with student ID " << studentId << ":" << endl;
+                cout << "Course Code: " << grades[i].courseCode << endl;
+                cout << "Grade: " << grades[i].grade << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "No grades found for student with student ID " << studentId << "." << endl;
+        }
+    }
+
+    void addAttendance(int studentId, string courseCode, int attendancePercentage) {
+        Attendance newAttendance(studentId, courseCode, attendancePercentage);
+        attendance.push_back(newAttendance);
+        cout << "Attendance added successfully." << endl;
+    }
+
+    void editAttendance(int studentId, string courseCode) {
+        bool found = false;
+        for (int i = 0; i < attendance.size(); i++) {
+            if (attendance[i].studentId == studentId && attendance[i].courseCode == courseCode) {
+                cout << "Enter new attendance percentage for student:" << endl;
+                // Pobranie nowej obecności od użytkownika i zaktualizowanie obiektu obecności
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Attendance for student with student ID " << studentId << " and course code " << courseCode << " not found." << endl;
+        }
+    }
+
+    void deleteAttendance(int studentId, string courseCode) {
+        bool found = false;
+        for (int i = 0; i < attendance.size(); i++) {
+            if (attendance[i].studentId == studentId && attendance[i].courseCode == courseCode) {
+                attendance.erase(attendance.begin() + i);
+                cout << "Attendance deleted successfully." << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Attendance for student with student ID " << studentId << " and course code " << courseCode << " not found." << endl;
+        }
+    }
+
+    void displayAttendance(int studentId) {
+        bool found = false;
+        for (int i = 0; i < attendance.size(); i++) {
+            if (attendance[i].studentId == studentId) {
+                cout << "Attendance for student with student ID " << studentId << ":" << endl;
+                cout << "Course Code: " << attendance[i].courseCode << endl;
+                cout << "Attendance Percentage: " << attendance[i].attendancePercentage << "%" << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "No attendance found for student with student ID " << studentId << "." << endl;
+        }
+    }
+
+
+
 };
 
+
 int main() {
+
     RecordManagementSystem rms;
 
-    Student student1("John", "Doe", 1001, "john.doe@example.com");
-    rms.addStudent(student1);
+    while (true) {
+        int choice;
+        cout << "1. Add Student" << endl;
+        cout << "2. Edit Student" << endl;
+        cout << "3. Delete Student" << endl;
+        cout << "4. Display Student" << endl;
+        cout << "5. Add Course" << endl;
+        cout << "6. Edit Course" << endl;
+        cout << "7. Delete Course" << endl;
+        cout << "8. Display Course" << endl;
+        cout << "9. Display All Students" << endl;
+        cout << "10. Display All Courses" << endl;
+        cout << "11. Add Grade" << endl;
+        cout << "12. Edit Grade" << endl;
+        cout << "13. Delete Grade" << endl;
+        cout << "14. Display Grades" << endl;
+        cout << "15. Add Attendance" << endl;
+        cout << "16. Edit Attendance" << endl;
+        cout << "17. Delete Attendance" << endl;
+        cout << "18. Display Attendance" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    Student student2("Jane", "Smith", 1002, "jane.smith@example.com");
-    rms.addStudent(student2);
+        if (choice == 0) {
+            break;
+        } else if (choice == 1) {
+            string firstName, lastName, email;
+            int studentId;
+            cout << "Enter first name: ";
+            cin >> firstName;
+            cout << "Enter last name: ";
+            cin >> lastName;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter email: ";
+            cin >> email;
 
-    Course course1("Mathematics", "MATH101", "Introduction to Mathematics");
-    rms.addCourse(course1);
+            Student student(firstName, lastName, studentId, email);
+            rms.addStudent(student);
+        } else if (choice == 2) {
+            int studentId;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            rms.editStudent(studentId);
+        } else if (choice == 3) {
+            int studentId;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            rms.deleteStudent(studentId);
+        } else if (choice == 4) {
+            int studentId;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            rms.displayStudent(studentId);
+        } else if (choice == 5) {
+            string courseName, courseCode, courseDescription;
+            cout << "Enter course name: ";
+            cin >> courseName;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            cout << "Enter course description: ";
+            cin >> courseDescription;
 
-    Course course2("Computer Science", "CS101", "Introduction to Computer Science");
-    rms.addCourse(course2);
+            Course course(courseName, courseCode, courseDescription);
+            rms.addCourse(course);
+        } else if (choice == 6) {
+            string courseCode;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.editCourse(courseCode);
+        } else if (choice == 7) {
+            string courseCode;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.deleteCourse(courseCode);
+        } else if (choice == 8) {
+            string courseCode;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.displayCourse(courseCode);
+        } else if (choice == 9) {
+            rms.displayAllStudents();
+        } else if (choice == 10) {
+            rms.displayAllCourses();
+        } else if (choice == 11) {
+            int studentId;
+            string courseCode, grade;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            cout << "Enter grade: ";
+            cin >> grade;
 
-    rms.displayAllStudents();
-    rms.displayAllCourses();
+            rms.addGrade(studentId, courseCode, grade);
+        } else if (choice == 12) {
+            int studentId;
+            string courseCode;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.editGrade(studentId, courseCode);
+        } else if (choice == 13) {
+            int studentId;
+            string courseCode;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.deleteGrade(studentId, courseCode);
+        } else if (choice == 14) {
+            int studentId;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            rms.displayGrades(studentId);
+        } else if (choice == 15) {
+            int studentId, attendancePercentage;
+            string courseCode;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            cout << "Enter attendance percentage: ";
+            cin >> attendancePercentage;
 
-    rms.displayStudent(1001);
-    rms.displayCourse("CS101");
+            rms.addAttendance(studentId, courseCode, attendancePercentage);
+        } else if (choice == 16) {
+            int studentId;
+            string courseCode;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.editAttendance(studentId, courseCode);
+        } else if (choice == 17) {
+            int studentId;
+            string courseCode;
+            cout << "Enter student ID:";
+            cin >> studentId;
+            cout << "Enter course code: ";
+            cin >> courseCode;
+            rms.deleteAttendance(studentId, courseCode);
+        } else if (choice == 18) {
+            int studentId;
+            cout << "Enter student ID: ";
+            cin >> studentId;
+            rms.displayAttendance(studentId);
+        } else {
+            cout << "Invalid choice. Please try again." << endl;
+        }
+    }
 
     return 0;
 }
+            
+ 
+ 
